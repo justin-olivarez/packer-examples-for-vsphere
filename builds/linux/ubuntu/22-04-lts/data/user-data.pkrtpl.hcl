@@ -66,7 +66,7 @@ autoinstall:
         id: lvm_volgroup-0
       - name: root
         volgroup: lvm_volgroup-0
-        size: 12288M
+        size: 28672M
         wipe: superblock
         type: lvm_partition
         id: lvm_partition-root
@@ -77,7 +77,7 @@ autoinstall:
         id: format-root
       - name: home
         volgroup: lvm_volgroup-0
-        size: 4096M
+        size: 9216M
         wipe: superblock
         type: lvm_partition
         id: lvm_partition-home
@@ -184,10 +184,12 @@ autoinstall:
   ssh:
     install-server: true
     allow-pw: true
+# To add gnome GUI to your Ubuntu server, add '- ubuntu-deskopt' the list of packages
   packages:
     - openssh-server
     - open-vm-tools
     - cloud-init
+    - ubuntu-desktop
   user-data:
     disable_root: false
     timezone: ${vm_guest_os_timezone}
