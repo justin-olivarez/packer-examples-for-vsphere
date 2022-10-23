@@ -10,7 +10,7 @@ cdrom
 
 ### Performs the kickstart installation in text mode. 
 ### By default, kickstart installations are performed in graphical mode.
-text
+# text
 
 ### Accepts the End User License Agreement.
 eula --agreed
@@ -40,7 +40,8 @@ user --name=${build_username} --iscrypted --password=${build_password_encrypted}
 ### Configure firewall settings for the system.
 ### --enabled	reject incoming connections that are not in response to outbound requests
 ### --ssh		allow sshd service through the firewall
-firewall --enabled --ssh
+# firewall --enabled --ssh
+firewall --disabled
 
 ### Sets up the authentication options for the system.
 ### The SSDD profile sets sha512 to hash passwords. Passwords are shadowed by default
@@ -77,9 +78,9 @@ volgroup sysvg --pesize=4096 pv.01
 
 ### Modify logical volume sizes for the virtual machine hardware.
 ### Create logical volumes.
-logvol swap --fstype swap --name=lv_swap --vgname=sysvg --size=1024 --label=SWAPFS
-logvol / --fstype xfs --name=lv_root --vgname=sysvg --size=12288 --label=ROOTFS
-logvol /home --fstype xfs --name=lv_home --vgname=sysvg --size=4096 --label=HOMEFS --fsoptions="nodev,nosuid"
+### logvol swap --fstype swap --name=lv_swap --vgname=sysvg --size=1024 --label=SWAPFS
+logvol / --fstype xfs --name=lv_root --vgname=sysvg --size=28672 --label=ROOTFS
+logvol /home --fstype xfs --name=lv_home --vgname=sysvg --size=9216 --label=HOMEFS --fsoptions="nodev,nosuid"
 logvol /opt --fstype xfs --name=lv_opt --vgname=sysvg --size=2048 --label=OPTFS --fsoptions="nodev"
 logvol /tmp --fstype xfs --name=lv_tmp --vgname=sysvg --size=4096 --label=TMPFS --fsoptions="nodev,noexec,nosuid"
 logvol /var --fstype xfs --name=lv_var --vgname=sysvg --size=4096 --label=VARFS --fsoptions="nodev"
@@ -89,13 +90,19 @@ logvol /var/log/audit --fstype xfs --name=lv_audit --vgname=sysvg --size=4096 --
 ### Modifies the default set of services that will run under the default runlevel.
 services --enabled=NetworkManager,sshd
 
-### Do not configure X on the installed system.
-skipx
+### Do not configure graphical-interface on the installed system.
+### skipx
 
 ### Packages selection.
-%packages --ignoremissing --excludedocs
-@core
--iwl*firmware
+### Default settings below
+### %packages --ignoremissing --excludedocs
+### @core
+### -iwl*firmware
+### %end
+
+### Custom Packages selection enable graphical-interface
+%packages
+@^graphical-server-environment
 %end
 
 ### Post-installation commands.
